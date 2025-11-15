@@ -26,7 +26,7 @@ function listAccounts() {
   // 3. 构建表格
   const table = new Table({
     head: ['alias', 'address', 'active'],
-    colWidths: [15, 45, 8],
+    colWidths: [15, 50, 8],
   });
 
   // 4. 填充表格数据
