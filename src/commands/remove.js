@@ -2,7 +2,7 @@ const fs = require('fs');
 const { validateAlias, getKeyFilePath } = require('../utils/path');
 const { getActiveKeyPath } = require('../utils/solana');
 const path = require('path');
-
+const ThrowErorr = require('../utils/throw_error');
 function removeAccount(alias) {
   // 1. 验证别名格式
   validateAlias(alias);
@@ -10,7 +10,7 @@ function removeAccount(alias) {
   // 2. 检查密钥文件是否存在
   const keyPath = getKeyFilePath(alias);
   if (!fs.existsSync(keyPath)) {
-    throw new Error(`Account "${alias}" not found. Use "soluser list" to check existing accounts.`);
+    ThrowErorr(`Account "${alias}" not found. Use "soluser list" to check existing accounts.`);
   }
 
   // 3. 检查是否为当前活跃账号

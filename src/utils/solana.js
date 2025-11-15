@@ -1,12 +1,12 @@
 const { execSync } = require('child_process');
 const { getKeyFilePath } = require('./path');
-
+const ThrowErorr = require('../utils/throw_error');
 // 执行 shell 命令并返回输出
 function execCommand(command) {
   try {
     return execSync(command, { encoding: 'utf8' }).trim();
   } catch (error) {
-    throw new Error(`Command failed: ${command}\n${error.stderr}`);
+    ThrowErorr(`Command failed: ${command}\n${error.stderr}`);
   }
 }
 
