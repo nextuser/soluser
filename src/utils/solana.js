@@ -21,7 +21,7 @@ function getActiveKeyPath() {
   const config = execCommand('solana config get keypair');
   // 从输出中提取路径（例如："Keypair Path: /home/user/.config/solana/keys/alice.json"）
   const match = config.match(/Key Path: (.*)/);
-  console.log("config:",config,"config match :",match)
+  //console.log("config:",config,"config match :",match)
   return match ? match[1] : null;
 }
 

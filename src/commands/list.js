@@ -34,7 +34,7 @@ function listAccounts() {
     const alias = path.basename(file, '.json');
     const address = getAddress(alias);
     const isActive = alias === activeAlias ? '*' : '';
-    console.log("alias: ", alias, "address: ", address, "isActive: ", isActive,'activeAlias',activeAlias )
+    //console.log("alias: ", alias, "address: ", address, "isActive: ", isActive,'activeAlias',activeAlias )
     table.push([alias, address, isActive]);
   });
 
