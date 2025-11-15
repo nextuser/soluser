@@ -25,3 +25,13 @@ $ soluser list
 $ soluser remove alice
 ```
 
+## 查看alias对应的地址
+```shell
+$ soluser address alice
+```
+
+## 查看alias对应的余额
+```shell
+$ soluser balance alice
+```
+

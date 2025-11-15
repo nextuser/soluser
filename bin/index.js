@@ -6,6 +6,30 @@ const switchAccount = require('../src/commands/switch');
 const listAccounts = require('../src/commands/list');
 const removeAccount = require('../src/commands/remove');
 
+// 导入地址查询命令
+const showAddress = require('../src/commands/address');
+
+// 定义地址查询命令
+program
+  .command('address')
+  .description('Output the base58 address of a Solana account')
+  .argument('<alias>', 'Alias of the account to get address') // 接收别名作为位置参数
+  .action((alias) => {
+    showAddress(alias);
+  });
+
+// 导入余额查询命令
+const checkBalance = require('../src/commands/balance');
+
+// 定义余额查询命令
+program
+  .command('balance')
+  .description('Check the SOL balance of a Solana account')
+  .argument('<alias>', 'Alias of the account to check balance') // 接收别名作为位置参数
+  .action((alias) => {
+    checkBalance(alias);
+  });
+
 
 // 定义新建账号命令
 // 定义新建账号命令（修改后）
