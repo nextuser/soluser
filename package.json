@@ -1,6 +1,6 @@
 {
   "name": "soluser",  
-  "version": "1.0.0", 
+  "version": "1.0.1", 
   "description": "A CLI tool to manage Solana accounts (new, switch, list)",
   "main": "bin/index.js", 
   "bin": {
