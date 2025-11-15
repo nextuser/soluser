@@ -1,7 +1,7 @@
 # soluser
 ## 安装
 ```shell
-npm install -g soluser
+npm install -g soluser@latest
 ```
 ## 新建账号
 ```shell
@@ -12,7 +12,7 @@ $ soluser new  bob --word-length 24 --no-bip39-passphrase
 
 ## 切换账号
 ```shell
-$ soluser switch --address alice
+$ soluser switch  bob
 ```
 
 ## 列出账号
@@ -25,7 +25,3 @@ $ soluser list
 $ soluser remove alice
 ```
 
-## 本地安装
-```shell
-npm link
-```
