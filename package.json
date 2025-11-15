@@ -1,13 +1,21 @@
 {
-  "name": "soluser",
-  "version": "1.0.0",
-  "description": "Solana account management tool",
+  "name": "soluser",  
+  "version": "1.0.0", 
+  "description": "A CLI tool to manage Solana accounts (new, switch, list)",
+  "main": "bin/index.js", 
   "bin": {
     "soluser": "./bin/index.js"
   },
+  "keywords": ["solana", "cli", "account", "wallet"],
+  "author": "nextuser323",
+  "license": "MIT", 
   "dependencies": {
     "commander": "^11.1.0",
     "cli-table3": "^0.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nextuser/soluser.git"
   }
 }
 
