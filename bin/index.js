@@ -23,17 +23,16 @@ program
     );
   });
 
-// 定义切换账号命令
+
+// 定义切换账号命令（修改后）
 program
   .command('switch')
   .description('Switch active Solana account')
-  .option('--address <alias>', 'Alias of the account to switch to', '')
-  .action((options) => {
-    if (!options.address) {
-      throw new Error('Alias is required (use --address <alias>)');
-    }
-    switchAccount(options.address);
+  .argument('<alias>', 'Alias of the account to switch to') // 新增位置参数
+  .action((alias) => { // 直接使用位置参数 alias
+    switchAccount(alias);
   });
+
 
 // 定义列出账号命令
 program
