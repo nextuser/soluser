@@ -7,7 +7,7 @@ npm install -g soluser@latest
 ```shell
 $ soluser new charlie
 $ soluser new  alice --word-length 12
-$ soluser new  bob --word-length 24 --no-bip39-passphrase
+$ soluser new  bob --word-length 24 --without-passphrase
 ```
 
 ## 切换账号
