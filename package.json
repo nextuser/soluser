@@ -1,0 +1,13 @@
+{
+  "name": "soluser",
+  "version": "1.0.0",
+  "description": "Solana account management tool",
+  "bin": {
+    "soluser": "./bin/index.js"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "cli-table3": "^0.6.3"
+  }
+}
+
