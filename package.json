@@ -7,7 +7,7 @@
     "soluser": "./bin/index.js"
   },
   "keywords": ["solana", "cli", "account", "wallet"],
-  "author": "nextuser323",
+  "author": "guahuzi",
   "license": "MIT", 
   "dependencies": {
     "commander": "^11.1.0",
