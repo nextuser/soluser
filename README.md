@@ -3,6 +3,12 @@
 ```shell
 npm install -g soluser@latest
 ```
+
+## 查看版本
+```shell
+$ soluser --version
+```
+
 ## 新建账号
 ```shell
 $ soluser new charlie
