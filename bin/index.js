@@ -13,7 +13,10 @@ const checkBalance = require('../src/commands/balance');
 // Import the airdrop command
 const requestAirdrop = require('../src/commands/airdrop');
 
-
+// Get version from package.json
+const packageJson = require('../package.json');
+// Set program version
+program.version(packageJson.version);
 
 // 定义地址查询命令
 program
