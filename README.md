@@ -35,3 +35,13 @@ $ soluser address alice
 $ soluser balance alice
 ```
 
+## airdrop 给alias
+```shell
+$ soluser airdrop 5 alice
+Requesting airdrop of 5 SOL
+
+Signature: 4BLUt5uxutbEwVywBTbAoBnG4EKb6QgsHgk3JRfjy6uJCoNjxdyYodbAhsWPXquBBwVzui1WyQxKn9d39JnwS3Pb
+
+500000005 SOL
+```
+

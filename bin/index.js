@@ -8,6 +8,12 @@ const removeAccount = require('../src/commands/remove');
 
 // 导入地址查询命令
 const showAddress = require('../src/commands/address');
+// 导入余额查询命令
+const checkBalance = require('../src/commands/balance');
+// Import the airdrop command
+const requestAirdrop = require('../src/commands/airdrop');
+
+
 
 // 定义地址查询命令
 program
@@ -18,9 +24,18 @@ program
     showAddress(alias);
   });
 
-// 导入余额查询命令
-const checkBalance = require('../src/commands/balance');
 
+// Define the airdrop command
+program
+  .command('airdrop')
+  .description('Request an airdrop of SOL to a Solana account')
+  .argument('<amount>', 'Amount of SOL to request')
+  .argument('<alias>', 'Alias of the account to receive the airdrop')
+  .action((amount, alias) => {
+    requestAirdrop(amount, alias);
+  });
+
+// ... existing code ...
 // 定义余额查询命令
 program
   .command('balance')

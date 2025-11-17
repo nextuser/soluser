@@ -12,7 +12,7 @@ function showAddress(alias) {
   // 2. 解析并输出 base58 地址
   try {
     const address = getAddress(alias); // 复用之前的 getAddress 函数（基于 solana-keygen）
-    console.log(address); // 直接输出地址（方便脚本调用）
+    process.stdout.write(address); // 直接输出地址（方便脚本调用）
   } catch (err) {
     console.error(`Error: Failed to parse address for "${alias}": ${err.message}`);
     process.exit(1);
