@@ -7,13 +7,13 @@ const { getAddress, getActiveKeyPath } = require('../utils/solana');
 function listAccounts() {
   // 1. 读取密钥目录下的所有 json 文件
   if (!fs.existsSync(KEYS_DIR)) {
-    console.log('No accounts found. Create one with "soluser new --alias <name>".');
+    console.log('No accounts found. Create one with "soluser new  <alias name>".');
     return;
   }
 
   const files = fs.readdirSync(KEYS_DIR).filter(file => file.endsWith('.json'));
   if (files.length === 0) {
-    console.log('No accounts found. Create one with "soluser new --alias <name>".');
+    console.log('No accounts found. Create one with "soluser new  <alias name>".');
     return;
   }
 
