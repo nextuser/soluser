@@ -5,6 +5,7 @@ const newAccount = require('../src/commands/new');
 const switchAccount = require('../src/commands/switch');
 const listAccounts = require('../src/commands/list');
 const removeAccount = require('../src/commands/remove');
+const { showExamples } = require('../src/utils/example');
 
 // 导入地址查询命令
 const showAddress = require('../src/commands/address');
@@ -15,8 +16,9 @@ const requestAirdrop = require('../src/commands/airdrop');
 
 // Get version from package.json
 const packageJson = require('../package.json');
+const version = packageJson.version;
 // Set program version
-program.version(packageJson.version);
+program.version(version);
 
 // 定义地址查询命令
 program
@@ -94,7 +96,18 @@ program
     removeAccount(alias);
   });
 
+  program.on('--help', () => {
+    console.log("version:" ,version);
+    showExamples();
+    process.exit(1);
+  });
 
 // 解析命令行参数
 program.parse(process.argv);
+
+// 处理无参数情况（显示帮助）
+if (process.argv.length === 2) {
+  
+  program.help();//program.outputHelp();
+}
 

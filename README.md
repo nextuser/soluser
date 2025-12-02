@@ -3,6 +3,12 @@
 ```shell
 npm install -g soluser@latest
 ```
+### 通过下载代码做本地安装的方法
+```
+git clone git@github.com:nextuser/soluser.git
+cd soluser
+npm link
+```
 
 ## 查看版本
 ```shell
@@ -11,9 +17,9 @@ $ soluser --version
 
 ## 新建账号
 ```shell
-$ soluser new charlie
-$ soluser new  alice --word-length 12
-$ soluser new  bob --word-length 24 --without-passphrase
+$ soluser new  alice 
+$ soluser new  bob --word-length 12
+$ soluser new  charlie --word-length 24 --without-passphrase
 ```
 
 ## 切换账号
