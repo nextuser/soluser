@@ -1,44 +1,61 @@
-const fs = require('fs');
-const { validateAlias, getKeyFilePath } = require('../utils/path');
-const { getActiveKeyPath } = require('../utils/solana');
-const path = require('path');
-const ThrowErorr = require('../utils/throw_error');
-function removeAccount(alias) {
-  // 1. 验证别名格式
-  validateAlias(alias);
-
-  // 2. 检查密钥文件是否存在
-  const keyPath = getKeyFilePath(alias);
-  if (!fs.existsSync(keyPath)) {
-    ThrowErorr(`Account "${alias}" not found. Use "soluser list" to check existing accounts.`);
-  }
-
-  // 3. 检查是否为当前活跃账号
-  const activeKeyPath = getActiveKeyPath();
-  const isActive = activeKeyPath === keyPath;
-  if (isActive) {
-    console.warn(`⚠️  Warning: "${alias}" is currently the active account. Deleting it will break current Solana config.`);
-  }
-
-  // 4. 确认删除（简单交互提示）
-  const readline = require('readline').createInterface({
+async function confirm(alias){
+  const readline = require('readline');
+ 
+  // 创建 readline 接口用于用户输入
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
-  readline.question(`Are you sure you want to delete "${alias}"? This will permanently remove the key file (y/N): `, (answer) => {
-    readline.close();
-    if (answer.trim().toLowerCase() === 'y') {
-      // 执行删除
-      fs.unlinkSync(keyPath);
-      console.log(`✅ Successfully deleted account: ${alias}`);
-      if (isActive) {
-        console.log('ℹ️  Tip: Use "soluser switch --address <alias>" to set a new active account.');
-      }
-    } else {
-      console.log('❌ Deletion cancelled.');
-    }
+  // 显示警告并等待用户确认
+  console.log(`\x1b[33mWARNING: You are about to remove account "${alias}"!\x1b[0m`);
+  console.log('This will move the account file to backup directory.');
+
+  const answer = await new Promise((resolve) => {
+    rl.question('Are you sure you want to continue? (yes/no): ', (input) => {
+      rl.close();
+      resolve(input.trim().toLowerCase());
+    });
   });
+
+  if (answer !== 'yes' && answer !== 'y') {
+    console.log('Operation cancelled.');
+    return false;
+  }
+  return true;
+
 }
+
+const removeAccount = async (alias) => {
+  const fs = require('fs');
+  const path = require('path');
+ 
+  // 获取当前时间戳
+  const now = new Date();
+  const timestamp = `${now.getFullYear().toString().slice(-2)}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
+  
+  
+  // 确保备份目录存在
+  const backupDir = path.join(require('os').homedir(), '.config', 'solana', 'keys', '.bak');
+  if (!fs.existsSync(backupDir)) {
+    fs.mkdirSync(backupDir, { recursive: true });
+  }
+  
+  // 构造源文件和目标文件路径
+  const sourceFile = path.join(require('os').homedir(), '.config', 'solana', 'keys', `${alias}.json`);
+  const destFile = path.join(backupDir, `${alias}_${timestamp}.json`);
+  
+  if (fs.existsSync(sourceFile)) {
+    const confirmed = await confirm(alias);
+    if (!confirmed) {
+      return;
+    }
+    fs.renameSync(sourceFile, destFile);
+    console.log(`Removed account "${alias}" from list`);
+  } else {
+    console.error(`Account "${alias}" not found`);
+    process.exit(1);
+  }
+};
 
 module.exports = removeAccount;

@@ -1,0 +1,128 @@
+// test/soluser.test.js
+
+const { expect } = require('chai');
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const { execExpectInput, execExpectOutput} = require('../src/utils/execExpectInput');
+
+ const cliPath = path.resolve(__dirname, '../bin/index.js');
+
+ describe('Soluser CLI Tool Tests', function() {
+ 
+  before(function() {
+    // 创建临时目录用于测试
+    if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
+      fs.mkdirSync(path.join(__dirname, 'tmp'));
+    }
+  });
+
+  after(function() {
+    // 清理测试产生的文件
+    if (fs.existsSync(path.join(__dirname, 'tmp'))) {
+      fs.rmSync(path.join(__dirname, 'tmp'), { recursive: true });
+    }
+  });
+
+  it('should display version with --version flag', function() {
+    const output = execSync(`node ${cliPath} --version`, { encoding: 'utf-8' });
+    expect(output).to.match(/\d+\.\d+\.\d+/); // 匹配版本号格式 x.x.x
+  });
+});
+
+
+describe('Account Management Commands',  function(done) { 
+    it('soluser sequence process', async function() {
+      await execExpectInput([cliPath, 'clear'], 'Are you sure you want to continue', 'y', 'All accounts have been removed.');
+
+      // const output = execSync(`node ${cliPath} list`, { encoding: 'utf-8' });
+      // expect(output).to.include('No accounts found.');
+      await execExpectOutput([cliPath, 'list'],`No accounts found`);
+    });
+    it('new account bob',async function(){
+      await execExpectOutput([cliPath ,  
+                  'new',
+                    'alice',
+                    '--without-passphrase'],
+                    null,
+                    (output)=>{
+                        expect(output).to.include('Generating key pair for').include('alice'); 
+                        //done();
+                    })
+    });
+    it('new account bob',async function(){
+      const command = `${cliPath} new bob --word-length 12 --without-passphrase`;
+      await execExpectOutput( 
+                  command.split(' '),
+                    null,
+                    (output)=>{
+                        expect(output).to.include('Generating key pair for').include('bob'); 
+                  })
+
+      await execExpectOutput([cliPath ,  
+                  'new',
+                    'charlie',
+                    '--word-length',' 24',
+                    '--without-passphrase'],
+                    null,
+                    (output)=>{
+                        expect(output).to.include('Successfully').include('charlie').include('json'); 
+                       /// done();
+                  })
+    });
+  });
+
+describe('switch',function(){ 
+  
+    it('switch ',async function(){
+      command = `${cliPath} switch alice`;
+      await execExpectOutput(command.split(' '),`Switched`,(output)=>{
+          expect(output).to.include('alice');
+          
+      })
+    });
+
+
+    it('list ',async function(){
+      await execExpectOutput([cliPath,"list"],"address",(output)=>{
+            expect(output).to.include('alice');
+            expect(output).to.include('bob');
+            expect(output).to.include('charlie');
+            //done();
+      } )
+
+    });
+
+    it('address bob', async function () { 
+    
+      await execExpectOutput([cliPath,"address","bob"],"",(output)=>{
+      expect(output).to.match(/[1-9A-HJ-NP-Za-km-z]{32,44}/)
+      } )
+    });
+
+    it('balance bob', async function () { 
+      await execExpectOutput([cliPath,"balance","bob"],"",(output)=>{
+      expect(output).to.include('SOL');
+      } )
+    });
+  });
+
+  describe('remove alice /prune charlie', function () { 
+    it('remove alice', async function () { 
+        //this.timeout(10000);
+        await execExpectInput([cliPath, 'remove', 'alice'], 'yes', 'yes', 'Removed account');
+    });
+  });
+describe('remove alice not found', function (done) { 
+ it('remove alice not found', async function () { 
+      //this.timeout(5000);
+      await execExpectInput([cliPath, 'remove', 'alice'], 'yes', 'yes', 'not found');
+
+  });
+
+  it('prune charlie' , async function () { 
+      //this.timeout(10000);
+       execExpectInput([cliPath, 'prune', 'charlie'], 'Confirm', 'yes', 'Removed account');
+  });
+}); 
+
