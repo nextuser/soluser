@@ -24,6 +24,10 @@ function execExpectInput(inputArgs, prompt , input,expectOut,done){
       errMsg += data.toString();
       output += data.toString();
     });
+
+    child.on('error', (err) => {
+      reject(err);
+    }); 
     
     child.on('close', (code) => {
 

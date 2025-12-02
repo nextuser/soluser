@@ -107,22 +107,37 @@ describe('switch',function(){
     });
   });
 
-  describe('remove alice /prune charlie', function () { 
-    it('remove alice', async function () { 
+  describe('remove alice ', function () { 
+    it('remove alice', function (done) { 
         //this.timeout(10000);
-        await execExpectInput([cliPath, 'remove', 'alice'], 'yes', 'yes', 'Removed account');
+         execExpectInput([cliPath, 'remove', 'alice'], 'Are you sure you want to continue', 'yes', 'Removed account').then(result =>
+          {
+            console.log("remove alice result:",result)
+            done()
+          } ).catch(err=>{ done(err) });
     });
   });
-describe('remove alice not found', function (done) { 
- it('remove alice not found', async function () { 
+
+describe('remove alice not found', function () { 
+ it('remove alice not found', function (done) { 
       //this.timeout(5000);
-      await execExpectInput([cliPath, 'remove', 'alice'], 'yes', 'yes', 'not found');
+      execExpectInput([cliPath, 'remove', 'alice'], 'yes', 'yes', 'not found').then(result=>{
+        console.log("remove alice not found result:",result)
+        expect(result).to.include('not found');
+        done();
+      }).catch(err=>{ done(err) });
 
   });
+});
+describe('prune charlie', function () { 
 
-  it('prune charlie' , async function () { 
-      //this.timeout(10000);
-       execExpectInput([cliPath, 'prune', 'charlie'], 'Confirm', 'yes', 'Removed account');
+  it('prune charlie' ,   function (done) { 
+       execExpectInput([cliPath, 'prune', 'charlie'], 'Confirm', 'yes', 'Successfully Deleted account').then(result =>
+        {
+          expect(result).to.include('charlie');
+          done()
+
+        } ).catch(err=>{ done(err) })
   });
 }); 
 

@@ -11,18 +11,35 @@ async function confirm(alias){
   console.log(`\x1b[33mWARNING: You are about to remove account "${alias}"!\x1b[0m`);
   console.log('This will move the account file to backup directory.');
 
-  const answer = await new Promise((resolve) => {
-    rl.question('Are you sure you want to continue? (yes/no): ', (input) => {
-      rl.close();
-      resolve(input.trim().toLowerCase());
-    });
-  });
+  // const answer = await new Promise((resolve) => {
+  //   rl.question('Are you sure you want to continue? (yes/no): ', (input) => {
+  //     resolve(input.trim().toLowerCase());
+  //   });
+  // });
+  // rl.close();
 
-  if (answer !== 'yes' && answer !== 'y') {
-    console.log('Operation cancelled.');
-    return false;
-  }
-  return true;
+  // if (answer !== 'yes' && answer !== 'y') {
+  //   console.log('Operation cancelled.');
+  //   return false;
+  // }
+  // return true;
+
+    let answer = await new Promise((resolve) => {
+      rl.question('Are you sure you want to continue? Type "yes" to proceed: ', (input) => {
+          resolve(input.trim().toLowerCase());
+        });
+    });
+    
+    rl.close();
+    if(answer) {
+      answer = answer.trim().toLowerCase();
+    }
+
+    if (answer !== 'yes' && answer !== 'y')  {
+      
+      return false;
+    }
+    return true;
 
 }
 
@@ -48,6 +65,7 @@ const removeAccount = async (alias) => {
   if (fs.existsSync(sourceFile)) {
     const confirmed = await confirm(alias);
     if (!confirmed) {
+      console.log('Operation cancelled.');
       return;
     }
     fs.renameSync(sourceFile, destFile);

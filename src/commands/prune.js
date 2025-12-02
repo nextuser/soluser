@@ -6,7 +6,7 @@ const ThrowErorr = require('../utils/throw_error');
 const chalk = require('chalk');
 const { getAddress } = require('../utils/solana');
 
-function pruneAccount(alias) {
+async function pruneAccount(alias) {
   // 1. 验证别名格式
   validateAlias(alias);
 
@@ -23,11 +23,7 @@ function pruneAccount(alias) {
     console.warn(`⚠️  Warning: "${alias}" is currently the active account. Deleting it will break current Solana config.`);
   }
 
-  // 4. 确认删除（简单交互提示）
-  const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
+ 
 
   const address = getAddress(alias);
 
@@ -37,20 +33,31 @@ function pruneAccount(alias) {
   Confirm continuation? (yes/no)
   `
 
-  readline.question(chalk.red(prune_confirm), (answer) => {
-    readline.close();
-    answer = answer.trim().toLowerCase();
-    if (answer === 'y' || answer === 'yes') {
-      // 执行删除
-      fs.unlinkSync(keyPath);
-      console.log(`✅ Successfully Deleted account: ${alias}`);
-      if (isActive) {
-        console.log('ℹ️  Tip: Use "soluser switch --address <alias>" to set a new active account.');
-      }
-    } else {
-      console.log('❌ Deletion cancelled.');
-    }
+   // 4. 确认删除（简单交互提示）
+  const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
   });
+
+  let answer = await new Promise((resolve) => {
+    readline.question(chalk.red(prune_confirm), (input) => {
+        resolve(input.trim().toLowerCase());
+      });
+  });
+  readline.close();
+
+
+  if (answer === 'y' || answer === 'yes') {
+    // 执行删除
+    fs.unlinkSync(keyPath);
+    console.log(`✅ Successfully Deleted account: ${alias}`);
+    if (isActive) {
+      console.log('ℹ️  Tip: Use "soluser switch --address <alias>" to set a new active account.');
+    }
+  } else {
+    console.log('❌ Deletion cancelled.');
+  }
+ 
 }
 
 module.exports = pruneAccount;
