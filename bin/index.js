@@ -60,7 +60,7 @@ program
 // 定义新建账号命令（修改后）
 program
   .command('new')
-  .alias('n')
+  .alias('add')
   .description('Create a new Solana account')
   .argument('<alias>', 'Alias for the new account (must start with a letter, contain letters, digits, hyphens, or underscores)') // 新增位置参数
   .option('--word-length <number>', 'Number of words in seed phrase (12,15,18,21,24)', 12)
