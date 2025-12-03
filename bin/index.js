@@ -8,6 +8,8 @@ const removeAccount = require('../src/commands/remove');
 const { showExamples } = require('../src/utils/example');
 const pruneAccount = require('../src/commands/prune');
 const clear = require('../src/commands/clear');
+  // 导入 keyfile 命令
+const showKeyfilePath = require('../src/commands/keyfile');
 
 
 // 导入地址查询命令
@@ -75,6 +77,17 @@ program
       parseInt(options.wordLength, 10), //10进制解析
       options.withoutPassphrase
     );
+  });
+
+// ...
+
+// 定义 keyfile 命令
+program
+  .command('keyfile')
+  .alias('k')
+  .description('Output the keyfile path of the current Solana account')
+  .action(() => {
+    showKeyfilePath();
   });
 
 

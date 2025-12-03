@@ -82,6 +82,16 @@ describe('switch',function(){
       })
     });
 
+    it('keyfile ',async function(){
+      command = `${cliPath} keyfile`;
+      await execExpectOutput(command.split(' '),'',(output)=>{
+          expect(output).to.include('.config/solana/keys/alice.json');
+          
+      })
+    });
+
+
+
 
     it('list ',async function(){
       await execExpectOutput([cliPath,"list"],"address",(output)=>{
@@ -105,6 +115,8 @@ describe('switch',function(){
       expect(output).to.include('SOL');
       } )
     });
+
+    
   });
 
   describe('remove alice ', function () { 
