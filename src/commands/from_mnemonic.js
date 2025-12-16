@@ -5,9 +5,11 @@ const  dotenv = require( 'dotenv');
 const  bs58 = require( 'bs58');
 const  fs = require( 'fs');
 const  path = require( 'path');
+const {debug} = require('../utils/debug');
 //根据助记词推算密钥(secretkey)和地址(publickey)
 ///const ed25519 = = require('ed25519-hd-keyed25519-hd-key')
-const ed25519 = require( 'ed25519-hd-key')
+const ed25519 = require( 'ed25519-hd-key');
+const { fileURLToPath } = require('url');
 dotenv.config()
 // BIP44路径
 const BIP44_SOLANA_PATH = "m/44'/501'/0'/0'";
@@ -19,7 +21,7 @@ function generate_keypair_path(mnemonic,bip44path) {
         //console.log('seed ', seed)
         const hex_bytes=  seed.toString('hex');
         //console.log("hex seed byte",Buffer.from(hex_bytes));
-        console.log("****BIP44_PATH:",bip44path);
+        debug("****BIP44_PATH:",bip44path);
         // 派生密钥
         const derivedSeed = ed25519.derivePath(bip44path,hex_bytes).key
         // 创建 ED25519 密钥对
@@ -36,7 +38,7 @@ function importMnemonic(mnemonic,alias) {
 
     // 对公钥进行哈希处理
 // 输出公钥和私钥
-    console.log('SOLANA Public Key:', keypair.publicKey.toBase58());
+    console.log('Address:', keypair.publicKey.toBase58());
     //console.log('SOLANA Private Key:', bs58.encode(keypair.secretKey)); // Base64 编码私钥
 
     write_secretekey(keypair,alias);
@@ -67,7 +69,7 @@ function write_secretekey(keypair ,alias){
     //console.log('msg ', msg)
     let file = path.resolve(process.env.HOME,".config/solana/keys/" , alias + ".json");
     fs.writeFileSync(file,msg)
-    console.log("write file  :\n",file);
+    console.log("write file  :",file);
 }
 
 if (process.env.TEST == "true"){

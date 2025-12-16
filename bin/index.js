@@ -52,7 +52,7 @@ program
   .argument('<mnemonic>', 'mnemoic oconsole.logf the account to import')
   .option('--alias <alias>', 'alias of account')
   .action((mnemonic,{alias}) => {
-    console.log("alias" ,alias)
+    console.log("alias:" ,alias)
     importMnemonic(mnemonic, alias);
   });
 
