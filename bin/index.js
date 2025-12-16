@@ -10,7 +10,7 @@ const pruneAccount = require('../src/commands/prune');
 const clear = require('../src/commands/clear');
   // 导入 keyfile 命令
 const showKeyfilePath = require('../src/commands/keyfile');
-
+const importMnemonic = require( '../src/commands/from_mnemonic');
 
 // 导入地址查询命令
 const showAddress = require('../src/commands/address');
@@ -44,6 +44,16 @@ program
   .argument('<alias>', 'Alias of the account to receive the airdrop')
   .action((amount, alias) => {
     requestAirdrop(amount, alias);
+  });
+
+program
+  .command('import')
+  .description('Import a Solana account from mnemonic')
+  .argument('<mnemonic>', 'mnemoic oconsole.logf the account to import')
+  .option('--alias <alias>', 'alias of account')
+  .action((mnemonic,{alias}) => {
+    console.log("alias" ,alias)
+    importMnemonic(mnemonic, alias);
   });
 
 // ... existing code ...
