@@ -5,6 +5,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const { execExpectInput, execExpectOutput} = require('../src/utils/execExpectInput');
+const {debug} = require('../src/utils/debug');
 
  const cliPath = path.resolve(__dirname, '../bin/index.js');
 
@@ -110,6 +111,20 @@ describe('switch',function(){
       } )
     });
 
+
+
+
+     it('import  address', async function () { 
+      const mnemonic = 'awkward '.repeat(11) + 'undo';
+      const command = `${cliPath} import "${mnemonic}" --alias someone`;
+      debug("command is ",command )
+      await execExpectOutput([cliPath,"import", mnemonic, "--alias","someone"],"someone",(output)=>{
+      console.log("output is ",output)
+        expect(output).to.include('3hgx2gsBVaBiEQAUmUsnrze25vjPydsBVx3R4zqL49W3');
+      } )
+    });
+
+
     it('balance bob', async function () { 
       await execExpectOutput([cliPath,"balance","bob"],"",(output)=>{
       expect(output).to.include('SOL');
@@ -129,6 +144,9 @@ describe('switch',function(){
           } ).catch(err=>{ done(err) });
     });
   });
+
+
+  
 
 describe('remove alice not found', function () { 
  it('remove alice not found', function (done) { 

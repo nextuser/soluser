@@ -32,6 +32,7 @@ function generate_keypair_path(mnemonic,bip44path) {
 function importMnemonic(mnemonic,alias) {
     // 验证助记词
     if (!bip39.validateMnemonic(mnemonic)) {
+        debug("mnemonic is ",mnemonic);
         throw new Error('无效的助记词');
     }
     let keypair = generate_keypair_path(mnemonic,BIP44_SOLANA_PATH);

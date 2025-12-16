@@ -67,7 +67,7 @@ function execExpectOutput(inputArgs, expectOut,finish_callback){
     
     child.on('close', (code) => {
       try{
-        //debug("output :",output);
+        debug("output :",output);
         //debug("code",code);
         if(expectOut) expect(output).to.include(expectOut);
         if(finish_callback) finish_callback(output);
