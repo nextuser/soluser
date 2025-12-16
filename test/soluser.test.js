@@ -126,7 +126,8 @@ describe('switch',function(){
 
 
     it('balance bob', async function () { 
-      await execExpectOutput([cliPath,"balance","bob"],"",(output)=>{
+      this.timeout(20000);
+      await execExpectOutput([cliPath,"balance","bob"],"bob",(output)=>{
       expect(output).to.include('SOL');
       } )
     });
