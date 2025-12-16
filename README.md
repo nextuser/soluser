@@ -57,3 +57,8 @@ Signature: 4BLUt5uxutbEwVywBTbAoBnG4EKb6QgsHgk3JRfjy6uJCoNjxdyYodbAhsWPXquBBwVzu
 500000005 SOL
 ```
 
+
+## import 助记词
+```shell
+$ soluser import "mnemonic words" --alias someone
+```

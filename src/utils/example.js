@@ -1,42 +1,45 @@
 const examples = `
 
-## 查看版本
+## Check version
 
 $ soluser --version
 
 
-## 新建账号
+## create account
 
 $ soluser new  alice 
 $ soluser new  bob --word-length 12
 $ soluser new  charlie --word-length 24 --without-passphrase
 
 
-## 切换账号
+## Switch account
 
 $ soluser switch  bob
 
-
-## 列出账号
+## List all accounts
 
 $ soluser list
 
-
-## 删除账号
+## Delete account
 
 $ soluser remove alice
 
-## 查看alias对应的地址
+## View address of alias
 
 $ soluser address alice
 
-## 查看alias对应的余额
+## View balance of alias
 
 $ soluser balance alice
 
-## airdrop 给alias
+## airdrop to alias
 
 $ soluser airdrop 5 alice
+
+## import Mnemonic 
+
+$ soluser import "mnemonic ... (12words or 24words)" --alias someone
+
 `;
 
 const chalk = require('chalk');
