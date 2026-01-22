@@ -36,7 +36,7 @@ const restore = async () => {
         const sourceFile = path.join(backupDir, backFile);
         const baseName = path.basename(backFile,".json");
         const originName = stripBackupSuffix(baseName);
-        debug("orginal name",originName);
+        debug("orginal name",originName, "basename",baseName);
         let destFile = path.join(keysDir, `${originName}.json`);
         if( fs.existsSync(destFile)){
           destFile = path.join(keysDir, backFile);

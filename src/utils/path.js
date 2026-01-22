@@ -23,8 +23,11 @@ function addBackupSuffix(baseName, suffix = null){
 
 function stripBackupSuffix(basename){
   let index = basename.lastIndexOf('_');
+  console.log("index:",index);
   if(index > 0 ){
-    return basename.substring(0,index - 1);
+    return basename.substring(0,index );
+  } else {
+    return basename;
   }
 }
 /**
