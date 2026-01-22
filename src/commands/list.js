@@ -11,7 +11,8 @@ function listAccounts() {
     return;
   }
 
-  const files = fs.readdirSync(KEYS_DIR).filter(file => file.endsWith('.json'));
+  const JSON_SUFFIX = '.json';
+  const files = fs.readdirSync(KEYS_DIR).filter(file => file.endsWith(JSON_SUFFIX) && file.length > JSON_SUFFIX.length);
   if (files.length === 0) {
     console.log('No accounts found. Create one with "soluser new  <alias name>".');
     return;
@@ -32,6 +33,9 @@ function listAccounts() {
   // 4. 填充表格数据
   files.forEach(file => {
     const alias = path.basename(file, '.json');
+    if(alias.trim() === ''){
+      return ;
+    }
     const address = getAddress(alias);
     const isActive = alias === activeAlias ? '*' : '';
     //console.log("alias: ", alias, "address: ", address, "isActive: ", isActive,'activeAlias',activeAlias )

@@ -1,13 +1,14 @@
 // test/soluser.test.js
 
 const { expect } = require('chai');
+const {describe, it, before, after} = require('mocha');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const { execExpectInput, execExpectOutput} = require('../src/utils/execExpectInput');
 const {debug} = require('../src/utils/debug');
-
- const cliPath = path.resolve(__dirname, '../bin/index.js');
+const { formatDateToYmd } = require('../src/utils/path');
+const cliPath = path.resolve(__dirname, '../bin/index.js');
 
  describe('Soluser CLI Tool Tests', function() {
  
@@ -47,8 +48,8 @@ describe('Account Management Commands',  function(done) {
                     '--without-passphrase'],
                     null,
                     (output)=>{
+                        debug("execExpectOutput callback: output=",output , "expect include","alice");
                         expect(output).to.include('Generating key pair for').include('alice'); 
-                        //done();
                     })
     });
     it('new account bob',async function(){
@@ -160,6 +161,7 @@ describe('remove alice not found', function () {
 
   });
 });
+
 describe('prune charlie', function () { 
 
   it('prune charlie' ,   function (done) { 
@@ -170,5 +172,7 @@ describe('prune charlie', function () {
 
         } ).catch(err=>{ done(err) })
   });
-}); 
+});
+
+
 

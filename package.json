@@ -1,6 +1,6 @@
 {
   "name": "soluser",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "A CLI tool to manage Solana accounts (new, switch, list)",
   "main": "bin/index.js",
   "bin": {
@@ -9,7 +9,8 @@
   "scripts": {
     "test": "mocha test/**/*.test.js --noparallel",
     "test:watch": "mocha test/**/*.test.js --watch",
-    "test:coverage": "nyc mocha test/**/*.test.js"
+    "test:coverage": "nyc mocha test/**/*.test.js",
+    "clear": "bin/index.js clear"
   },
   "keywords": [
     "solana",
@@ -31,7 +32,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.7",
-    "mocha": "^10.2.0",
+    "mocha": "^10.8.2",
     "nyc": "^15.1.0"
   },
   "files": [

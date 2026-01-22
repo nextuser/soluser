@@ -1,6 +1,8 @@
 const { execSync } = require('child_process');
 const { getKeyFilePath } = require('./path');
 const ThrowErorr = require('../utils/throw_error');
+const fs = require('fs');
+const { Keypair } = require('@solana/web3.js');
 // 执行 shell 命令并返回输出
 function execCommand(command) {
   try {
@@ -16,6 +18,13 @@ function getAddress(alias) {
   return execCommand(`solana-keygen pubkey ${keyPath}`);
 }
 
+function getAddressByFile(file) {
+  const data = fs.readFileSync(file, 'utf8');
+  const jsonData = JSON.parse(data);
+  const keypair = Keypair.fromSecretKey(Uint8Array.from(jsonData));
+  return keypair.publicKey.toBase58();
+}
+
 // 获取当前活跃的密钥路径
 function getActiveKeyPath() {
   const config = execCommand('solana config get keypair');
@@ -29,5 +38,6 @@ module.exports = {
   execCommand,
   getAddress,
   getActiveKeyPath,
+  getAddressByFile
 };
 

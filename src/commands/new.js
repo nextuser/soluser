@@ -14,8 +14,8 @@ function newAccount(alias, wordLength = 12, noPassphrase = false) {
 
   // 3. 新增：检查账号是否已存在
   if (existsAccount(alias)) {
-    console.error(`Error: Account "${alias}" already exists.`);
-    console.error(`       Use "soluser list" to view existing accounts, or choose a different alias.`);
+    console.log(`Error: Account "${alias}" already exists.`);
+    console.log(`       Use "soluser list" to view existing accounts, or choose a different alias.`);
     process.exit(1);
   }
 
@@ -40,7 +40,7 @@ function newAccount(alias, wordLength = 12, noPassphrase = false) {
     execCommand(command);
     console.log(`Successfully created account: ${alias} (saved to ${getKeyFilePath(alias)})`);
   } catch (err) {
-    console.error(`Error: Failed to generate key pair: ${err.message}`);
+    console.log(`Error: Failed to generate key pair: ${err.message}`);
     process.exit(1);
   }
 }

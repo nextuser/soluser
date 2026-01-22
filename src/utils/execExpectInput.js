@@ -1,41 +1,52 @@
 const { expect } = require('chai');
 const { execSync, spawn } = require('child_process');
 const {debug} =require('./debug');
-const { stdout } = require('process');
-function execExpectInput(inputArgs, prompt , input,expectOut,done){
+const { PassThrough } = require('stream');
+
+function execExpectInput(inputArgs, prompt , input,expectOut,check_callback){
 
    return new Promise((resolve, reject) => {
-    const child = spawn('node',inputArgs);
+    const task = spawn('node',inputArgs , {stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8'});
     const command = "node " + inputArgs.join(" ");
+    
+    const stdoutStream = new PassThrough({encoding: 'utf8'});
+    task.stdout.pipe(stdoutStream);
+    task.stderr.pipe(stdoutStream);
+
+
     debug("execExpectInput command:",command);
     let output = '';
     let errMsg = '';
     
-    child.stdout.on('data', (data) => {
-      //debug("stdout:",data.toString());
-      output += data.toString();
-      if (output.includes(prompt)) {
-        //debug("incluse prompt:",prompt);
-        child.stdin.write( input + '\n');
+    stdoutStream.on('data', (chunk) => {
+      output += chunk.toString();
+      if (output.includes(output)) {
+        //output = '';//reset output when output match
+        task.stdin.write( input + '\n');
+        //output = '';
       }
     });
 
-    child.stderr.on('data', (data) => {
-      errMsg += data.toString();
-      output += data.toString();
+    task.stderr.on('data', (chunk) => {
+      console.error("error:",chunk.toString().trim(),"command:",command);
     });
 
-    child.on('error', (err) => {
+    task.on('error', (err) => {
+      console.error("error to execute:,command",command );
       reject(err);
     }); 
     
-    child.on('close', (code) => {
+    task.on('close', (code) => {
 
       try{
-          expect(output).to.include(expectOut);
-          if(done) done(output);
-          debug("execute sucessfuly,command:",command )
+          debug("executeExpectInput close ,command:",command,"expectOut:",expectOut,"output :[[[",output,"]]]" )
+          if(expectOut){
+            expect(output).to.include(expectOut);
+          } 
+          
+          if(check_callback) check_callback(output);         
           resolve(output);
+          
       } catch(err){
         console.error("error to execute : node ", inputArgs, `output=${output},prompt=${prompt} expectOut: ${expectOut} errMsg=${errMsg}` );
         reject(err);
@@ -49,56 +60,50 @@ function execExpectInput(inputArgs, prompt , input,expectOut,done){
 function execExpectOutput(inputArgs, expectOut,finish_callback){
 
   return new Promise((resolve, reject) => {
-    const child = spawn('node',inputArgs);
-
+    const task = spawn('node',inputArgs,{stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8'});
+    const command = "node " + inputArgs.join(" ");
+    const taskStream = new PassThrough({encoding: 'utf8'});
     let output = '';
     let errMsg = '';
-    child.stdout.resume();
-    child.stdout.on('data', (data) => {
+    task.stdout.pipe(taskStream);
+    //task.stderr.pipe(taskStream);
+
+    taskStream.on('data', (data) => {
       output += data.toString();
     });
 
-    child.stderr.on('data', (data) => {
+    taskStream.on('data', (data) => {
       errMsg += data.toString();
-      output += data.toString();
+      ///output += data.toString();
     });
+
+    task.on('error', (err) => {
+      console.error("error to execute:,command",command );
+      console.error("errMsg:",errMsg);
+      reject(err);
+    }); 
 
     
     
-    child.on('close', (code) => {
+    task.on('close', (code) => {
       try{
-        debug("output :",output);
-        //debug("code",code);
+        debug("ExpectOutput close:  command : ", command, "expectOut", expectOut,
+          "output :[[[",output,"]]] \n errMsg:",
+           errMsg , "callback exist:", !!finish_callback);
+        ////let out = output + errMsg;
         if(expectOut) expect(output).to.include(expectOut);
         if(finish_callback) finish_callback(output);
         debug("execute sucessfuly,command:",command )
         
         resolve(output);
       } catch(err){
-        console.error("error to execute : node ", inputArgs, `output=${output}, expectOut: ${expectOut}  errMsg=${errMsg}` );
+        console.error("ExpectOutput:error to execute :", command, `output=${output}, expectOut: ${expectOut}  errMsg=${errMsg}` );
         reject(err);
       }
     });
-    const command = "node " + inputArgs.join(" ");
-    debug("execExpectOutput command:",command);
+    //debug("execExpectOutput command:",command);
   });
 
 }
-
-
-function execExpectOutputOld(inputArgs, expectOut,finish_callback){
-    let command = "node " + inputArgs.join(" ");
-    debug("command:",command);
-    let out = execSync(command)
-    try{
-        if(expectOut) expect(output).to.include(expectOut);
-        if(finish_callback) finish_callback(output);
-    } catch(err){
-      console.error("error to execute : node ",  `command:${command}, expectOut: ${expectOut}` );
-      throw err;
-    }
-
-}
-
 
 module.exports =  {execExpectInput,execExpectOutput};

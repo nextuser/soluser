@@ -8,6 +8,7 @@ const removeAccount = require('../src/commands/remove');
 const { showExamples } = require('../src/utils/example');
 const pruneAccount = require('../src/commands/prune');
 const clear = require('../src/commands/clear');
+const restoreAccount = require('../src/commands/restore');
   // 导入 keyfile 命令
 const showKeyfilePath = require('../src/commands/keyfile');
 const importMnemonic = require( '../src/commands/from_mnemonic');
@@ -117,7 +118,10 @@ program
   .command('list')
   .alias('l')
   .description('List all Solana accounts')
-  .action(listAccounts);
+  .action(() =>{
+    listAccounts();
+    //process.exit(0);
+  });
 
   // 定义删除账号命令
 program
@@ -143,6 +147,14 @@ program
   .description('prune a Solana account (prune the private key file)')
   .action((alias) => {
     pruneAccount(alias);
+    
+  });
+      // 定义删除账号命令
+program
+  .command('restore ') // <alias> 为必填参数
+  .description('restore file from backup directory')
+  .action(() => {
+    restoreAccount();
   });
 
 
@@ -151,7 +163,7 @@ program
   program.on('--help', () => {
     console.log("version:" ,version);
     showExamples();
-    process.exit(1);
+    //process.exit(1);
   });
 
 

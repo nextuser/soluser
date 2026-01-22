@@ -1,3 +1,6 @@
+const { getBackupDir, addBackupSuffix } = require('../utils/path');
+const { getAddressByFile } = require('../utils/solana');
+const {debug} = require('../utils/debug');
 async function confirm(alias){
   const readline = require('readline');
  
@@ -49,20 +52,20 @@ const removeAccount = async (alias) => {
  
   // 获取当前时间戳
   const now = new Date();
-  const timestamp = `${now.getFullYear().toString().slice(-2)}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
   
   
   // 确保备份目录存在
-  const backupDir = path.join(require('os').homedir(), '.config', 'solana', 'keys', '.bak');
-  if (!fs.existsSync(backupDir)) {
-    fs.mkdirSync(backupDir, { recursive: true });
-  }
+  const backupDir = getBackupDir();
   
   // 构造源文件和目标文件路径
   const sourceFile = path.join(require('os').homedir(), '.config', 'solana', 'keys', `${alias}.json`);
-  const destFile = path.join(backupDir, `${alias}_${timestamp}.json`);
+
   
   if (fs.existsSync(sourceFile)) {
+    const address = getAddressByFile(sourceFile);
+  
+    const destFile = path.join(backupDir, `${addBackupSuffix(alias,address)}.json`);
+    console.log(`remove Address: ${address} destFile: ${destFile}`)
     const confirmed = await confirm(alias);
     if (!confirmed) {
       console.log('Operation cancelled.');
@@ -71,7 +74,7 @@ const removeAccount = async (alias) => {
     fs.renameSync(sourceFile, destFile);
     console.log(`Removed account "${alias}" from list`);
   } else {
-    console.error(`Account "${alias}" not found`);
+    console.log(`Account "${alias}" not found`);
     process.exit(1);
   }
 };
