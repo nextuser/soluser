@@ -1,7 +1,6 @@
 const  { Keypair } = require( '@solana/web3.js');
 const  bip39 = require( 'bip39');
 const  { Buffer } = require( 'buffer');
-const  dotenv = require( 'dotenv');
 const  bs58 = require( 'bs58');
 const  fs = require( 'fs');
 const  path = require( 'path');
@@ -10,7 +9,6 @@ const {debug} = require('../utils/debug');
 ///const ed25519 = = require('ed25519-hd-keyed25519-hd-key')
 const ed25519 = require( 'ed25519-hd-key');
 const { fileURLToPath } = require('url');
-dotenv.config()
 // BIP44路径
 const BIP44_SOLANA_PATH = "m/44'/501'/0'/0'";
 
