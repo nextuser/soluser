@@ -40,6 +40,9 @@ $ soluser airdrop 5 alice
 
 $ soluser import "mnemonic ... (12words or 24words)" --alias someone
 
+## export private key of alias
+$ soluser export alice
+
 `;
 
 const chalk = require('chalk');

@@ -19,6 +19,7 @@ const showAddress = require('../src/commands/address');
 const checkBalance = require('../src/commands/balance');
 // Import the airdrop command
 const requestAirdrop = require('../src/commands/airdrop');
+const exportPrivateKey = require('../src/commands/export');
 
 // Get version from package.json
 const packageJson = require('../package.json');
@@ -157,7 +158,15 @@ program
     restoreAccount();
   });
 
-
+// 定义 export 命令
+program
+  .command('export')
+  .alias('e')
+  .description('Output the base58 private key of a Solana account')
+  .argument('<alias>', 'Alias of the account to export private key')
+  .action((alias) => {
+    exportPrivateKey(alias);
+  });
 
 
   program.on('--help', () => {

@@ -60,3 +60,8 @@ Signature: 4BLUt5uxutbEwVywBTbAoBnG4EKb6QgsHgk3JRfjy6uJCoNjxdyYodbAhsWPXquBBwVzu
 ```shell
 $ soluser import "mnemonic words" --alias someone
 ```
+
+## 导出私钥为base58编码
+```shell
+$ soluser export someone
+```
